@@ -1,24 +1,15 @@
-import pandas as pd
+
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
 import requests
-from urllib.parse import urlparse
-from urllib.parse import quote
-import json
-import urllib.request
-import re
 
-
-
-start = time.time()
 url='https://search.shopping.naver.com/category/category/50000004'
 driver = webdriver.Chrome('./chromedriver.exe')
 driver.implicitly_wait(30)
 driver.get(url)
-last_page_height = driver.execute_script("return document.documentElement.scrollHeight")
-html_source = driver.page_source
 
+html_source = driver.page_source
 soup = BeautifulSoup(html_source, "lxml")
 bigcategory= soup.select("div.__50000004_category_cell__yNbrS > h3 > a > strong")
 str_bigcategory = []
@@ -41,9 +32,11 @@ bs_obj = BeautifulSoup(result.content, "html.parser")
 link = bs_obj.findAll("div", {"class":"__50000004_category_cell__yNbrS"})
 hrefs = [div.find("a")['href'] for div in link]
 for i in range(6):
-    hrefs[i]='https://search.shopping.naver.com'+hrefs[i]+'&productSet=window&pagingSize=80'
+    hrefs[i]='https://search.shopping.naver.com'+hrefs[i]+'&productSet=window&pagingSize=10'
+    print(hrefs[i])
 hrefs[4] = hrefs[5]
 hrefs[5]=None
+
 
 
 #링크 들어가서 중간 카테고리 가져오기
@@ -65,6 +58,7 @@ while i<5:
         str_tmp = str_tmp.replace('\t', '')
         str_tmp = str_tmp.replace('   ', '')
         str_category.append(str_tmp)
+    print(str_category)
     category_arr.append(str_category)
     driver.get(url)
     time.sleep(1.0)

@@ -19,7 +19,7 @@ for i in range(len(c.hrefs)):
     url = c.hrefs[i]
     driver.get(url)
     cate = c.cate[i] #파일이름에 붙일 카테고리 이름
-
+    idx = 0  # 파일 이름에 붙일 숫자
     # 중간카테고리 클릭
     for j in range(c.idx[i]):
         print("##")
@@ -30,8 +30,8 @@ for i in range(len(c.hrefs)):
 
         mid_url = driver.current_url
         page = 1
-        idx = 0 #파일 이름에 붙일 숫자
-        idx+=1
+
+
         str_list = [] # 상품목록배열
         # 80개씩 2페이지, 최대 160개 리스트 가져오기
         while page < 3:
@@ -79,19 +79,21 @@ for i in range(len(c.hrefs)):
 
             # print(img)
 
-            price = soup.select("div.basicList_price_area__1UXXR")
-            # cate2 = soup1.select("div.basicList_depth__2QIie>a:nth-of-type(2)")
-            # cate3 = soup1.select("div.basicList_depth__2QIie>a:nth-of-type(3)")
-            # mallName = soup1.select("div.basicList_mall_title__3MWFY>a")
+            time.sleep(3)
+
+            price = soup.select("span.price_num__2WUXn")
+            cate2 = soup.select("div.basicList_depth__2QIie>a:nth-of-type(2)")
+            cate3 = soup.select("div.basicList_depth__2QIie>a:nth-of-type(3)")
+            mallName = soup.select("a.basicList_mall__sbVax")
 
             #판매불가 상품 정보 제외시키기
             for e in range(len(exp_idx)):
                 del href[exp_idx[e]]
                 del title[exp_idx[e]]
                 del price[exp_idx[e]]
-                #del cate2[e]
-                #del cate3[e]
-                #del mallName[e]
+                del cate2[e]
+                del cate3[e]
+                del mallName[e]
 
 
             for j in range(len(price)):
@@ -99,11 +101,11 @@ for i in range(len(c.hrefs)):
                 h = href[j]
                 i = img[j]
                 p = price[j].text
-                # c2 = cate2[j].text
-                # c3 = cate3[j].text
-                # m = mallName[j].text
-                str_list.append([t, h, i, p])
-            print(str_list)
+                c2 = cate2[j].text
+                c3 = cate3[j].text
+                m = mallName[j].text
+                str_list.append([t, h, i, p, c2, c3, m])
+
 
             # 한 페이지에 있는 개수가 80개보다 적으면 이동할 페이지 없음 -> 반복문 종료
             if page_item_num < 80:
@@ -113,10 +115,11 @@ for i in range(len(c.hrefs)):
 
         # 상품리스트 csv파일만들기
         data = pd.DataFrame(str_list)
-        data.columns = ['pd_title', 'pd_href', 'pd_img', 'pd_price']
-        filename = cate + str(idx) + ".csv"
+        data.columns = ['pd_title', 'pd_href', 'pd_img', 'pd_price','pd_c2', 'pd_c3','pd_mall']
+        filename = "./item_list/"+cate + str(idx) + ".csv"
         data.to_csv(filename, encoding='utf-8-sig')
-
+        idx += 1
+        time.sleep(3)
         driver.get(url)
 
 
