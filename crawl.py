@@ -33,7 +33,7 @@ link = bs_obj.findAll("div", {"class":"__50000004_category_cell__yNbrS"})
 hrefs = [div.find("a")['href'] for div in link]
 for i in range(6):
     hrefs[i]='https://search.shopping.naver.com'+hrefs[i]+'&productSet=window&pagingSize=10'
-    print(hrefs[i])
+
 hrefs[4] = hrefs[5]
 hrefs[5]=None
 
@@ -58,7 +58,6 @@ while i<5:
         str_tmp = str_tmp.replace('\t', '')
         str_tmp = str_tmp.replace('   ', '')
         str_category.append(str_tmp)
-    print(str_category)
     category_arr.append(str_category)
     driver.get(url)
     time.sleep(1.0)
@@ -74,7 +73,7 @@ cate = ['bed', 'living', 'kitchen', 'storage', 'library']
 idx = []
 for i in range(5):
     idx.append(len(category_arr[i]))
-print("--")
+
 
 
 

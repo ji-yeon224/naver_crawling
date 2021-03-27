@@ -10,6 +10,7 @@ import urllib.request
 import re
 import crawl as c
 
+
 from selenium.webdriver.common.keys import Keys
 
 #큰 카테고리 링크 들어가기
