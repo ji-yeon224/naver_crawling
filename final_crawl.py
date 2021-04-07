@@ -71,9 +71,10 @@ for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
                 r = review[k].text
                 c = customerId[k].text
                 rD = reviewDate[k].text
-                c1=bed[j]
-                c2=category_name[0]
-                result.append([str(k), s, r, c, rD ,c1 ,c2])
+                p = str(a)
+                c1 = bed[j]
+                c2 = category_name[0]
+                result.append([str(k), s, r, c, rD, p, c1, c2])
             print(len(review))
             if len(review) < 20:
                 break
@@ -93,3 +94,12 @@ for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
 
     file.close()
     driver.close()
+
+
+
+
+
+
+
+
+
