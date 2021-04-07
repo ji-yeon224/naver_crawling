@@ -5,10 +5,16 @@ import time
 
 from selenium.webdriver.common.keys import Keys
 
+category_name=['침실가구','거실가구','서재/사무용가구','주방가구','수납가구']
+href = []
+bed = ['침대','매트리스','장롱/붙박이장','화장대','거울','협탁','부부테이블','침실세트','서랍장']
+living = ['소파','테이블','TV거실장','장식장']
+kitchen = ['식탁/의자','레인지대','왜건/카트','주방수납장','그릇장/컵보드','와인용품','기타주방가구']
+storage = ['행거','수납장','선반','공간박스','고가구','나비장','CD/DVD장','신발장','우산꽂이','잡지꽂이','코너장','소품수납함']
+library = ['책상','의자','책장','책꽂이','사무/교구용가구']
 
-reviewImage = []
 
-for j in range(0, 12):  # 카테고리 별 상품 개수 for문임 (bed는 9개니까)
+for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개니까 0부터 9 -> item_list파일 개수대로하기)
     filename = './item_list/bed/' + "bed" + str(j) + '.csv'  # bed 폴더랑 파일 이름 만 변경하면됨
     file = open(filename, 'r', encoding='utf-8-sig')
     data = pd.read_csv(file)
@@ -40,13 +46,13 @@ for j in range(0, 12):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
             time.sleep(3)
             if page != 2:
                 try:
-                    bt = driver.find_element_by_xpath(
-                        '//*[@id="REVIEW"]/div/div[3]/div/div[2]/a[' + str(page) + ']').send_keys(Keys.ENTER)
+                    bt = driver.find_element_by_xpath('//*[@id="REVIEW"]/div/div[3]/div/div[2]/a['+str(page)+']').send_keys(Keys.ENTER)
                 except:
                     break
                 time.sleep(3)
             page += 1
 
+            # 변경된 url로  페이지 소스 가져오기
             html_source1 = driver.page_source
             soup = BeautifulSoup(html_source1, "html.parser")
             driver.implicitly_wait(30)
@@ -57,24 +63,18 @@ for j in range(0, 12):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
             for em in ems:
                 stars.append(em.text)
             review = soup.select("div._3AGQlpCnyu>span._2Xe0HVhCew")
-            reviewImages = soup.select('div._28mE__69Rv>span._30jCYXkysR>img:nth-of-type(1)')
-            for i in reviewImages:
-                reviewImage.append(i.attrs['src'])
-                # print(reviewImage)
-
             customerId = soup.select("div._2DSGiSauFJ>strong._2Xe0HVhCew")
-            # option = soup.select("div._31mfFx_-xd>button.NIYM68WJ2v>span._2Xe0HVhCew")
             reviewDate = soup.select("div._2DSGiSauFJ>span._2Xe0HVhCew")
 
             for k in range(len(review)):
                 s = stars[k]
                 r = review[k].text
-
                 c = customerId[k].text
-                # o = option[k].text
                 rD = reviewDate[k].text
-
-                result.append([str(k), s, r, c, rD])
+                p = str(a)
+                c1 = bed[j]
+                c2 = category_name[0]
+                result.append([str(k), s, r, c, rD, p, c1, c2])
             print(len(review))
             if len(review) < 20:
                 break
@@ -86,13 +86,12 @@ for j in range(0, 12):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
             print(result)
 
             data = pd.DataFrame(result)
-            data.columns = ['review_no','star', 'review', 'customerId', 'reviewDate']
+            data.columns = ['review_no','star', 'review', 'customerId', 'reviewDate','pd_no','bedcate_no','category_no']
 
             filename = 'reviews/bed/bed' + str(j) + "-review" + str(a) + ".csv"
             # bed0-review0.csv 이런식 으로 저장
             data.to_csv(filename, encoding='utf-8-sig', index = False)
 
-    driver.close()
     file.close()
-
+    driver.close()
 
