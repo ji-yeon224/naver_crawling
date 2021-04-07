@@ -58,14 +58,17 @@ for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
             soup = BeautifulSoup(html_source1, "html.parser")
             driver.implicitly_wait(30)
 
-            stars = []
-            ul = soup.find('ul', {'class': '_1iaDS5tcmC'})
-            ems = ul.find_all('em')
-            for em in ems:
-                stars.append(em.text)
             review = soup.select("div._3AGQlpCnyu>span._2Xe0HVhCew")
             customerId = soup.select("div._2DSGiSauFJ>strong._2Xe0HVhCew")
             reviewDate = soup.select("div._2DSGiSauFJ>span._2Xe0HVhCew")
+            stars = []
+            try:
+                ul = soup.find('ul', {'class': '_1iaDS5tcmC'})
+                ems = ul.find_all('em')
+                for em in ems:
+                    stars.append(em.text)
+            except:
+                break
 
             for k in range(len(review)):
                 s = stars[k]
@@ -88,7 +91,7 @@ for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
 
             data = pd.DataFrame(result)
             data.columns = ['review_no','star', 'review', 'customerId', 'reviewDate','pd_no','bedcate_no','category_no']
-            
+
             ####파일 이름 수정
             filename = 'reviews/bed/bed' + str(j) + "-review" + str(a) + ".csv"
             # bed0-review0.csv 이런식 으로 저장
