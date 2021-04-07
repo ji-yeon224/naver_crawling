@@ -13,7 +13,9 @@ kitchen = ['식탁/의자','레인지대','왜건/카트','주방수납장','그
 storage = ['행거','수납장','선반','공간박스','고가구','나비장','CD/DVD장','신발장','우산꽂이','잡지꽂이','코너장','소품수납함']
 library = ['책상','의자','책장','책꽂이','사무/교구용가구']
 
+#### for문 range변경해야함 bed->0,9 / kitchen->0,7 / library->0,5 / living->0,4 / storage -> 0,12
 for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개니까 0부터 9 -> item_list파일 개수대로하기)
+    ####폴더 이름이랑 파일이름 변경해야함(카테고리 이름으로)
     filename = './item_list/bed/' + "bed" + str(j) + '.csv'  # bed 폴더랑 파일 이름 만 변경하면됨
     file = open(filename, 'r', encoding='utf-8-sig')
     data = pd.read_csv(file)
@@ -71,8 +73,8 @@ for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
                 c = customerId[k].text
                 rD = reviewDate[k].text
                 p = str(a)
-                c1 = bed[j]
-                c2 = category_name[0]
+                c1 = bed[j] #### 이름 수정 living / kitchen / storage / library
+                c2 = category_name[0] ####인덱스 변경필요 living->1 / kitchen->3 / storage -> 4/ library->2
                 result.append([str(k), s, r, c, rD, p, c1, c2])
             print(len(review))
             if len(review) < 20:
@@ -86,7 +88,8 @@ for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
 
             data = pd.DataFrame(result)
             data.columns = ['review_no','star', 'review', 'customerId', 'reviewDate','pd_no','bedcate_no','category_no']
-
+            
+            ####파일 이름 수정
             filename = 'reviews/bed/bed' + str(j) + "-review" + str(a) + ".csv"
             # bed0-review0.csv 이런식 으로 저장
             data.to_csv(filename, encoding='utf-8-sig', index = False)

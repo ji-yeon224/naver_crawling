@@ -15,7 +15,6 @@ from selenium.webdriver.common.keys import Keys
 
 #큰 카테고리 링크 들어가기
 for i in range(len(c.hrefs)):
-    print("@@")
     driver = webdriver.Chrome('./chromedriver.exe')
     url = c.hrefs[i]
     driver.get(url)
@@ -23,7 +22,6 @@ for i in range(len(c.hrefs)):
     idx = 0  # 파일 이름에 붙일 숫자
     # 중간카테고리 클릭
     for j in range(c.idx[i]):
-        print("##")
         link = driver.find_element_by_xpath(
             '//*[@id="__next"]/div/div[2]/div/div[2]/div[1]/div[1]/div[2]/div/ul/li['+str(j+1)+']/a')
         link.send_keys(Keys.ENTER)
@@ -31,8 +29,6 @@ for i in range(len(c.hrefs)):
 
         mid_url = driver.current_url
         page = 1
-
-
         str_list = [] # 상품목록배열
         # 80개씩 2페이지, 최대 160개 리스트 가져오기
         while page < 3:
