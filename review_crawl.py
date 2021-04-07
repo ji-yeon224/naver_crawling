@@ -13,7 +13,6 @@ kitchen = ['식탁/의자','레인지대','왜건/카트','주방수납장','그
 storage = ['행거','수납장','선반','공간박스','고가구','나비장','CD/DVD장','신발장','우산꽂이','잡지꽂이','코너장','소품수납함']
 library = ['책상','의자','책장','책꽂이','사무/교구용가구']
 
-
 for j in range(0, 9):  # 카테고리 별 상품 개수 for문임 (bed는 9개니까 0부터 9 -> item_list파일 개수대로하기)
     filename = './item_list/bed/' + "bed" + str(j) + '.csv'  # bed 폴더랑 파일 이름 만 변경하면됨
     file = open(filename, 'r', encoding='utf-8-sig')
