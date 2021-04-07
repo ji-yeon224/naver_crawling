@@ -9,7 +9,7 @@ from selenium.webdriver.common.keys import Keys
 reviewImage = []
 
 for j in range(0, 12):  # 카테고리 별 상품 개수 for문임 (bed는 9개니까)
-    filename = './item_list/storage/' + "storage" + str(j) + '.csv'  # bed 폴더랑 파일 이름 만 변경하면됨
+    filename = './item_list/bed/' + "bed" + str(j) + '.csv'  # bed 폴더랑 파일 이름 만 변경하면됨
     file = open(filename, 'r', encoding='utf-8-sig')
     data = pd.read_csv(file)
     print(filename)
@@ -51,7 +51,11 @@ for j in range(0, 12):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
             soup = BeautifulSoup(html_source1, "html.parser")
             driver.implicitly_wait(30)
 
-            star = soup.select("em._15NU42F3kT")
+            stars = []
+            ul = soup.find('ul', {'class': '_1iaDS5tcmC'})
+            ems = ul.find_all('em')
+            for em in ems:
+                stars.append(em.text)
             review = soup.select("div._3AGQlpCnyu>span._2Xe0HVhCew")
             reviewImages = soup.select('div._28mE__69Rv>span._30jCYXkysR>img:nth-of-type(1)')
             for i in reviewImages:
@@ -63,17 +67,14 @@ for j in range(0, 12):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
             reviewDate = soup.select("div._2DSGiSauFJ>span._2Xe0HVhCew")
 
             for k in range(len(review)):
-                s = star[k].text
+                s = stars[k]
                 r = review[k].text
-                try:
-                    rI = reviewImage[k]  # review이미지 없는 경우 pass
-                except:
-                    pass
+
                 c = customerId[k].text
                 # o = option[k].text
                 rD = reviewDate[k].text
 
-                result.append([s, r, rI, c, rD])
+                result.append([str(k), s, r, c, rD])
             print(len(review))
             if len(review) < 20:
                 break
@@ -85,11 +86,11 @@ for j in range(0, 12):  # 카테고리 별 상품 개수 for문임 (bed는 9개�
             print(result)
 
             data = pd.DataFrame(result)
-            data.columns = ['star', 'review', 'reviewImage', 'customerId', 'reviewDate']
+            data.columns = ['review_no','star', 'review', 'customerId', 'reviewDate']
 
-            filename = 'reviews/storage/storage' + str(j) + "-review" + str(a) + ".csv"
+            filename = 'reviews/bed/bed' + str(j) + "-review" + str(a) + ".csv"
             # bed0-review0.csv 이런식 으로 저장
-            data.to_csv(filename, encoding='utf-8-sig')
+            data.to_csv(filename, encoding='utf-8-sig', index = False)
 
     driver.close()
     file.close()
